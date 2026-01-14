@@ -46,7 +46,34 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
+app.patch("/tasks/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ error: "Status is required" });
+  }
+
+  try {
+    await notion.pages.update({
+      page_id: id,
+      properties: {
+        Status: {
+          status: {
+            name: status,
+          },
+        },
+      },
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("ERROR updating status:", error);
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
 const PORT = 3000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0",() => {
   console.log(`Servidor en http://localhost:${PORT}/tasks`);
 });

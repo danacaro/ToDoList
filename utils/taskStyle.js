@@ -3,10 +3,10 @@ export const TYPE_COLORS = {
   Academico: "#556fa9ff",
   Health: "#dcac5fff",
   Expandir: "#de97bfff",
-  Finance: "#9ddc80ff",
+  Finance: "#7aa665ff",
   Viajes: "#c185d9ff",
 };
 
 export const getBackgroundColorByType = (type) => {
-  return TYPE_COLORS[type] ?? "#55854aff";
+  return TYPE_COLORS[type] ?? "#565656ff";
 };
