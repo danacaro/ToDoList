@@ -8,5 +8,18 @@ export const TYPE_COLORS = {
 };
 
 export const getBackgroundColorByType = (type) => {
-  return TYPE_COLORS[type] ?? "#565656ff";
+  return TYPE_COLORS[type] ?? "#a3a38cff";
+};
+
+export const TYPE_ICONS = {
+  Work: "briefcase-outline",
+  Academico: "school-outline",
+  Health: "fitness-outline",
+  Expandir: "trending-up-outline",
+  Finance: "cash-outline",
+  Viajes: "airplane-outline",
+};
+
+export const getIconByType = (type) => {
+  return TYPE_ICONS[type] ?? null;
 };

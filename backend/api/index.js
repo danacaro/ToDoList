@@ -26,17 +26,33 @@ function parsePage(page) {
 }
 
 app.get("/tasks", async (req, res) => {
-  const { status } = req.query
+  const { status, type } = req.query;
+
   try {
-    const response = await notion.dataSources.query({
-      data_source_id: process.env.DATA_SOURCE_ID,
-      filter: {
+    const filters = [];
+
+    if (status) {
+      filters.push({
         property: "Status",
         status: {
           equals: status,
-        }
-      }
-    })
+        },
+      });
+    }
+
+    if (type) {
+      filters.push({
+        property: "Type",
+        select: {
+          equals: type,
+        },
+      });
+    }
+
+    const response = await notion.dataSources.query({
+      data_source_id: process.env.DATA_SOURCE_ID,
+      filter: filters.length > 0 ? { and: filters } : undefined,
+    });
 
     const tasks = response.results.map(parsePage);
     res.json(tasks);
@@ -74,6 +90,6 @@ app.patch("/tasks/:id/status", async (req, res) => {
 });
 
 const PORT = 3000;
-app.listen(PORT, "0.0.0.0",() => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor en http://localhost:${PORT}/tasks`);
 });

@@ -1,10 +1,20 @@
 const BASE_URL = "http://192.168.100.11:3000";
 
-export async function fetchTasks(status) {
+export const NEW_STATUS = {
+  Priority: "Done",
+  "Not started": "Priority",
+};
+
+export async function fetchTasks({ status, type } = {}) {
   try {
-    const url = status
-      ? `${BASE_URL}/tasks?status=${encodeURIComponent(status)}`
-      : `${BASE_URL}/tasks`;
+    const params = new URLSearchParams();
+
+    if (status) params.append("status", status);
+    if (type) params.append("type", type);
+
+    const url = `${BASE_URL}/tasks${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
 
     const response = await fetch(url);
 
@@ -18,13 +28,14 @@ export async function fetchTasks(status) {
     throw error;
   }
 }
-export const updateTaskStatus = async (taskId, newStatus) => {
+
+export const updateTaskStatus = async (taskId, status) => {
   const response = await fetch(`${BASE_URL}/tasks/${taskId}/status`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ status: newStatus }),
+    body: JSON.stringify({ status: NEW_STATUS[status] }),
   });
 
   if (!response.ok) {
