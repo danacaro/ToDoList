@@ -18,14 +18,14 @@ import {
 export default function AddTaskScreen() {
   const [name, setName] = useState("");
   const [priority, setPriority] = useState("Medium");
-  const [type, setType] = useState("Work");
+  const [area, setArea] = useState("Work");
   const [status, setStatus] = useState("Not started");
   const [openPicker, setOpenPicker] = useState<OpenPicker>(null);
   const [due, setDue] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const iconScale = useRef(new Animated.Value(0)).current;
 
-  type OpenPicker = "priority" | "type" | "status" | null;
+  type OpenPicker = "priority" | "area" | "status" | null;
 
   useFocusEffect(
     useCallback(() => {
@@ -34,7 +34,7 @@ export default function AddTaskScreen() {
   );
 
   useEffect(() => {
-    if (!type) return;
+    if (!area) return;
 
     iconScale.setValue(0);
 
@@ -44,13 +44,13 @@ export default function AddTaskScreen() {
       tension: 80,
       useNativeDriver: true,
     }).start();
-  }, [type]);
+  }, [area]);
 
   const resetForm = () => {
     setName("");
     setDue(null);
     setPriority("Low");
-    setType("Null");
+    setArea("Null");
     setStatus("Not started");
     setOpenPicker(null);
     setShowDatePicker(false);
@@ -66,9 +66,10 @@ export default function AddTaskScreen() {
   const handleAddTask = () => {
     const newTask = {
       name,
+      area,
       due,
       priority,
-      type,
+      //type,
       status,
     };
 
@@ -84,8 +85,8 @@ export default function AddTaskScreen() {
           opacity: iconScale,
         }}
       >
-        {getIconByType(type) ? (
-          <Ionicons name={getIconByType(type)} size={82} color="#fff" />
+        {getIconByType(area) ? (
+          <Ionicons name={getIconByType(area)} size={82} color="#fff" />
         ) : (
           <Text style={styles.title}>New task!</Text>
         )}
@@ -103,7 +104,7 @@ export default function AddTaskScreen() {
           shadowOpacity: 0.25,
           shadowRadius: 6,
           elevation: 8,
-          backgroundColor: getBackgroundColorByType(type),
+          backgroundColor: getBackgroundColorByType(area),
         }}
       >
         {/* NAME */}
@@ -116,26 +117,28 @@ export default function AddTaskScreen() {
 
         {/* TYPE */}
         <SectionHeader
-          label="Type"
-          value={type}
-          onPress={() => setOpenPicker(openPicker === "type" ? null : "type")}
+          label="Area"
+          value={area}
+          onPress={() => setOpenPicker(openPicker === "area" ? null : "area")}
         />
 
-        {openPicker === "type" && (
+        {openPicker === "area" && (
           <Picker
-            selectedValue={type}
+            selectedValue={area}
             onValueChange={async (value) => {
-              setType(value);
+              setArea(value);
               await playSound(SOUNDS.icon);
               setOpenPicker(null);
             }}
           >
-            <Picker.Item label="Work" value="Work" />
-            <Picker.Item label="Academico" value="Academico" />
-            <Picker.Item label="Health" value="Health" />
-            <Picker.Item label="Expandir" value="Expandir" />
+            <Picker.Item label="Professional" value="Professional" />
+            <Picker.Item label="Responsabilities" value="Responsabilities" />
+            <Picker.Item label="Health & Beauty" value="Health & Beauty" />
+            <Picker.Item label="Personal" value="Personal" />
             <Picker.Item label="Finance" value="Finance" />
-            <Picker.Item label="Viajes" value="Viajes" />
+            <Picker.Item label="Traveling" value="Traveling" />
+            <Picker.Item label="Social" value="Social" />
+            <Picker.Item label="Home" value="Home" />
           </Picker>
         )}
 

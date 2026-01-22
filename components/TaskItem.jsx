@@ -3,13 +3,40 @@ import { playSound } from "@/utils/playSound.js";
 import { SOUNDS } from "@/utils/sounds";
 import { getBackgroundColorByType } from "@/utils/taskStyle";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function TaskItem({ task, onOpenConfirm }) {
+export default function TaskItem({ 
+  task, 
+  onOpenConfirm, 
+  isRemoving, 
+  onRemoveAnimationEnd, 
+}) {
   const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
-  console.log("TASK:", task);
+  console.log("TASSSK:", task);
+
+  //Delete animation
+
+  useEffect(() => {
+    if (!isRemoving) return;
+
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 0.95,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      onRemoveAnimationEnd();
+    });
+  }, [isRemoving]);
 
   //Button animation
   const pressIn = () => {
@@ -34,73 +61,81 @@ export default function TaskItem({ task, onOpenConfirm }) {
   console.log(getButtonColor(task.status), task.status);
 
   return (
-    <View
+    <Animated.View
       style={{
-        padding: 16,
-        marginBottom: 12,
-        borderRadius: 8,
-        backgroundColor: getBackgroundColorByType(task.type),
-        shadowColor: "#000000ff",
-        shadowOffset: { width: 0, height: 9 },
-        shadowOpacity: 0.25,
-        shadowRadius: 2,
+        opacity,
+        transform: [{ scale }],
       }}
     >
-      {/* FILA */}
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "flex-start",
+          padding: 16,
+          marginBottom: 12,
+          borderRadius: 8,
+          backgroundColor: getBackgroundColorByType(task.area),
+          shadowColor: "#000000ff",
+          shadowOffset: { width: 0, height: 9 },
+          shadowOpacity: 0.25,
+          shadowRadius: 2,
         }}
       >
+        {/* FILA */}
         <View
           style={{
-            flex: 1,
-            minWidth: 0,
+            flexDirection: "row",
+            alignItems: "flex-start",
           }}
         >
-          <Text
+          <View
             style={{
-              fontWeight: "bold",
-              fontSize: 18,
+              flex: 1,
+              minWidth: 0,
             }}
-            numberOfLines={2}
-            ellipsizeMode="tail"
           >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 18,
+              }}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
             {task.name}
-          </Text>
-        </View>
+            </Text>
+          </View>
 
-        <Pressable
-          style={styles.button}
-          onPress={async () => {
-            await playSound(SOUNDS.click);
-            onOpenConfirm();
-          }}
-          onPressIn={pressIn}
-          onPressOut={pressOut}
-        >
-          <Animated.View
-            style={[
-              styles.button,
-              {
-                transform: [{ scale }],
-                backgroundColor: bgColor,
-              },
-            ]}
+          <Pressable
+            style={styles.button}
+            onPress={async () => {
+              await playSound(SOUNDS.click);
+              onOpenConfirm();
+            }}
+            onPressIn={pressIn}
+            onPressOut={pressOut}
           >
-            <Ionicons
-              name={getButtonType(task.status)}
-              size={44}
-              color="white"
-              style={styles.icon}
-            />
-          </Animated.View>
-        </Pressable>
+            <Animated.View
+              style={[
+                styles.button,
+                {
+                  transform: [{ scale }],
+                  backgroundColor: bgColor,
+                },
+              ]}
+            >
+              <Ionicons
+                name={getButtonType(task.status)}
+                size={44}
+                color="white"
+                style={styles.icon}
+              />
+            </Animated.View>
+          </Pressable>
+        </View>
+        <Text style={{ color: "#000" }}>Status: {task.status}</Text>
+        <Text style={{ color: "#000" }}>Priority: {task.priority}</Text>
       </View>
-      <Text style={{ color: "#000" }}>Status: {task.status}</Text>
-      <Text style={{ color: "#000" }}>Priority: {task.priority}</Text>
-    </View>
+    </Animated.View>
+    
   );
 }
 

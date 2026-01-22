@@ -19,14 +19,14 @@ function parsePage(page) {
     id: page.id,
     name: props.Name?.title?.[0]?.plain_text ?? null,
     status: props.Status?.status?.name ?? null,
-    priority: props.Priority?.select?.name ?? null,
     due: props.Due?.date?.start ?? null,
     type: props.Type?.select?.name ?? null,
+    area: props.Area?.select?.name ?? null,
   };
 }
 
 app.get("/tasks", async (req, res) => {
-  const { status, type } = req.query;
+  const { status, area } = req.query;
 
   try {
     const filters = [];
@@ -40,11 +40,11 @@ app.get("/tasks", async (req, res) => {
       });
     }
 
-    if (type) {
+    if (area) {
       filters.push({
-        property: "Type",
+        property: "Area",
         select: {
-          equals: type,
+          equals: area,
         },
       });
     }

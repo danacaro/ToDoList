@@ -5,9 +5,24 @@ import { fetchTasks } from "../../src/tasks.js";
 
 export default function TasksScreen() {
   const [data, setData] = useState([]);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const handleTaskDeleted = (taskId) => {
+    setData(prev => prev.filter(t => t.id !== taskId));
+  };
+
+  const triggerConfetti = () => {
+    setShowConfetti(true);
+
+    // se desmonta solo
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, 1200);
+  };
+
 
   useEffect(() => {
-    fetchTasks({ status: "Priority", type: "Work" })
+    fetchTasks({ status: "To Do"})
       .then((data) => {
         console.log("DATA FROM API:", data);
         setData(data);
@@ -26,7 +41,12 @@ export default function TasksScreen() {
         flex: 1,
       }}
     >
-      <TaskList tasks={data} onTaskPress={() => {}} />
+      <TaskList 
+      tasks={data} 
+      onTaskPress={() => {}} 
+      onTaskDeleted={handleTaskDeleted}
+      onCelebrate={triggerConfetti}
+      />
     </View>
   );
 }

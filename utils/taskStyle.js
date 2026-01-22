@@ -1,25 +1,29 @@
-export const TYPE_COLORS = {
-  Work: "#818689ff",
-  Academico: "#556fa9ff",
-  Health: "#dcac5fff",
-  Expandir: "#de97bfff",
+export const AREA_COLORS = {
+  Professional: "#818689ff",
+  Responsabilities: "#556fa9ff",
+  "Health & Beauty": "#dcac5fff",
+  Personal: "#de97bfff",
   Finance: "#7aa665ff",
-  Viajes: "#c185d9ff",
+  Traveling: "#c185d9ff",
+  Social: "#efa168ff",
+  Home: "#9f875eff",
 };
 
-export const getBackgroundColorByType = (type) => {
-  return TYPE_COLORS[type] ?? "#a3a38cff";
+export const getBackgroundColorByType = (area) => {
+  return AREA_COLORS[area] ?? "#a3a38cff";
 };
 
-export const TYPE_ICONS = {
-  Work: "briefcase-outline",
-  Academico: "school-outline",
-  Health: "fitness-outline",
-  Expandir: "trending-up-outline",
+export const AREA_ICONS = {
+  Professional: "briefcase-outline",
+  Responsabilities: "school-outline",
+  "Health & Beauty": "fitness-outline",
+  Personal: "trending-up-outline",
   Finance: "cash-outline",
-  Viajes: "airplane-outline",
+  Traveling: "airplane-outline",
+  Social: "airplane-outline",
+  Home: "airplane-outline",
 };
 
-export const getIconByType = (type) => {
-  return TYPE_ICONS[type] ?? null;
+export const getIconByType = (area) => {
+  return AREA_ICONS[area] ?? null;
 };

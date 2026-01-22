@@ -3,13 +3,16 @@ import { FlatList, View } from "react-native";
 import ConfirmModal from "./ConfirmModal";
 import TaskItem from "./TaskItem";
 
-export default function TaskList({ tasks, onTaskPress }) {
+export default function TaskList({ tasks, onTaskPress, onTaskDeleted, }) {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [selectedTaskStatus, setSelectedTaskStatus] = useState(null);
   const [selectedTaskName, setSelectedTaskName] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [removingTaskId, setRemovingTaskId] = useState(null);
 
-  const openConfirmModal = (taskId, taskName) => {
+  const openConfirmModal = (taskId, taskStatus, taskName) => {
     setSelectedTaskId(taskId);
+    setSelectedTaskStatus(taskStatus);
     setSelectedTaskName(taskName);
     setModalVisible(true);
   };
@@ -24,7 +27,13 @@ export default function TaskList({ tasks, onTaskPress }) {
           <TaskItem
             task={item}
             onPress={onTaskPress}
-            onOpenConfirm={() => openConfirmModal(item.id, item.name)}
+            onOpenConfirm={() => openConfirmModal(item.id, item.status, item.name)}
+            isRemoving={item.id === removingTaskId}
+            onRemoveAnimationEnd={() => {
+              onTaskDeleted(item.id);
+              setRemovingTaskId(null);
+              onCelebrate();
+            }}
           />
         )}
         contentContainerStyle={{
@@ -36,8 +45,12 @@ export default function TaskList({ tasks, onTaskPress }) {
         visible={modalVisible}
         taskId={selectedTaskId}
         taskName={selectedTaskName}
-        status="Done"
+        status= {selectedTaskStatus}
         onClose={() => setModalVisible(false)}
+        onConfirmed={() => {
+          setRemovingTaskId(selectedTaskId);
+          setModalVisible(false);
+        }}
       />
     </View>
   );

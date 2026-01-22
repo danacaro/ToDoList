@@ -7,7 +7,7 @@ export default function TasksScreen2() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchTasks({ status: "Not started" })
+    fetchTasks({ status: "Blocked"})
       .then((data) => {
         console.log("DATA FROM API:", data);
         setData(data);

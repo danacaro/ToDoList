@@ -1,11 +1,15 @@
 export const TYPE_BUTTONS = {
-  Priority: "checkbox-outline",
-  "Not started": "add-circle-outline",
+  "To Do": "checkbox-outline",
+  "Blocked": "add-circle-outline",
+  "Idea": "add-circle-outline",
+  "Planned": "add-circle-outline",
 };
 
 export const COLOR_BUTTONS = {
-  Priority: ["#235523ff", "#3d783dff"],
-  "Not started": ["#3a2355ff", "#603d78ff"],
+  "To Do": ["#235523ff", "#3d783dff"],
+  "Blocked": ["#3a2355ff", "#603d78ff"],
+  "Idea": ["#3a2355ff", "#603d78ff"],
+  "Planned": ["#3a2355ff", "#603d78ff"],
 };
 
 export const getButtonType = (type) => {

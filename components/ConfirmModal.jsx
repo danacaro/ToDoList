@@ -5,13 +5,14 @@ import { SOUNDS } from "@/utils/sounds";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import {
-    Animated,
-    Modal,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
+  Animated,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
+
 
 export default function ConfirmModal({
   visible,
@@ -19,13 +20,20 @@ export default function ConfirmModal({
   taskName,
   status,
   onClose,
+  onConfirmed,
 }) {
+  console.log(" current status:", status);
+
   const scale = useRef(new Animated.Value(1)).current;
 
   const confirmMarkAsDone = async () => {
+    playSound(SOUNDS.confirm);
+    
+    onConfirmed?.();
+    onClose();
+
     try {
       await updateTaskStatus(taskId, status);
-      onClose();
     } catch (error) {
       console.error("ERROR updating task:", error);
     }
@@ -70,7 +78,6 @@ export default function ConfirmModal({
 
           <Pressable
             onPress={async () => {
-              playSound(SOUNDS.confirm);
               confirmMarkAsDone();
             }}
             onPressIn={pressIn}
