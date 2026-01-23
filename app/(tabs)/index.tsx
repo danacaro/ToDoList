@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import Confetti from "../../components/Confetti";
 import TaskList from "../../components/TaskList";
 import { fetchTasks } from "../../src/tasks.js";
 
 export default function TasksScreen() {
   const [data, setData] = useState([]);
-  const [showConfetti, setShowConfetti] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
+
 
   const handleTaskDeleted = (taskId) => {
     setData(prev => prev.filter(t => t.id !== taskId));
@@ -13,13 +15,8 @@ export default function TasksScreen() {
 
   const triggerConfetti = () => {
     setShowConfetti(true);
-
-    // se desmonta solo
-    setTimeout(() => {
-      setShowConfetti(false);
-    }, 1200);
+    setTimeout(() => setShowConfetti(false), 1200);
   };
-
 
   useEffect(() => {
     fetchTasks({ status: "To Do"})
@@ -47,6 +44,8 @@ export default function TasksScreen() {
       onTaskDeleted={handleTaskDeleted}
       onCelebrate={triggerConfetti}
       />
+
+      {showConfetti && <Confetti />}
     </View>
   );
 }

@@ -1,11 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { Dimensions } from "react-native";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
+const { width, height } = Dimensions.get("window");
+
 export function ConfettiPiece({ color }) {
+  const startX = useMemo(() => Math.random() * width, []);
+  const startY = useMemo(
+    () => -Math.random() * height * 0.4,
+    []
+  );
+
+  const delay = useMemo(() => Math.random() * 400, []);
+
+
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const rotate = useSharedValue(0);
@@ -13,21 +25,21 @@ export function ConfettiPiece({ color }) {
 
   useEffect(() => {
     translateX.value = withTiming(
-      Math.random() * 300 - 150,
-      { duration: 800 }
+      Math.random() * width - width / 2,
+      { duration: 1200 }
     );
 
     translateY.value = withTiming(
-      Math.random() * 600 + 300,
-      { duration: 1200 }
+      height + Math.random() * 200,
+      { duration: 1400, delay }
     );
 
     rotate.value = withTiming(
-      Math.random() * 720,
-      { duration: 1200 }
+      Math.random() * 1080,
+      { duration: 1400 }
     );
 
-    opacity.value = withTiming(0, { duration: 1200 });
+    opacity.value = withTiming(0, { duration: 1400 });
   }, []);
 
   const style = useAnimatedStyle(() => ({
@@ -44,6 +56,8 @@ export function ConfettiPiece({ color }) {
       style={[
         {
           position: "absolute",
+          left: startX,
+          top: startY,
           width: 8,
           height: 14,
           backgroundColor: color,

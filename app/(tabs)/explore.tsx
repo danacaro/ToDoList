@@ -6,6 +6,10 @@ import { fetchTasks } from "../../src/tasks.js";
 export default function TasksScreen2() {
   const [data, setData] = useState([]);
 
+  const handleTaskDeleted = (taskId) => {
+    setData(prev => prev.filter(t => t.id !== taskId));
+  };
+
   useEffect(() => {
     fetchTasks({ status: "Blocked"})
       .then((data) => {
@@ -25,7 +29,13 @@ export default function TasksScreen2() {
         backgroundColor: "#3a3a3aff",
       }}
     >
-      <TaskList tasks={data} onTaskPress={() => {}} />
+      <TaskList 
+            tasks={data} 
+            onTaskPress={() => {}} 
+            onTaskDeleted={handleTaskDeleted}
+            onCelebrate={() => {}}
+      />
+
     </View>
   );
 }

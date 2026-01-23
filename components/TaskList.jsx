@@ -3,12 +3,13 @@ import { FlatList, View } from "react-native";
 import ConfirmModal from "./ConfirmModal";
 import TaskItem from "./TaskItem";
 
-export default function TaskList({ tasks, onTaskPress, onTaskDeleted, }) {
+export default function TaskList({ tasks, onTaskPress, onTaskDeleted, onCelebrate, }) {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [selectedTaskStatus, setSelectedTaskStatus] = useState(null);
   const [selectedTaskName, setSelectedTaskName] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [removingTaskId, setRemovingTaskId] = useState(null);
+
 
   const openConfirmModal = (taskId, taskStatus, taskName) => {
     setSelectedTaskId(taskId);
@@ -29,10 +30,10 @@ export default function TaskList({ tasks, onTaskPress, onTaskDeleted, }) {
             onPress={onTaskPress}
             onOpenConfirm={() => openConfirmModal(item.id, item.status, item.name)}
             isRemoving={item.id === removingTaskId}
+            onRemoveAnimationStart={onCelebrate}
             onRemoveAnimationEnd={() => {
               onTaskDeleted(item.id);
               setRemovingTaskId(null);
-              onCelebrate();
             }}
           />
         )}

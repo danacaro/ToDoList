@@ -9,7 +9,8 @@ import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 export default function TaskItem({ 
   task, 
   onOpenConfirm, 
-  isRemoving, 
+  isRemoving,
+  onRemoveAnimationStart,
   onRemoveAnimationEnd, 
 }) {
   const scale = useRef(new Animated.Value(1)).current;
@@ -21,6 +22,7 @@ export default function TaskItem({
 
   useEffect(() => {
     if (!isRemoving) return;
+    onRemoveAnimationStart();
 
     Animated.parallel([
       Animated.timing(opacity, {

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { ConfettiPiece } from "./ConfettiPiece";
 
-const COLORS = ["#00c853", "#ffab00", "#ff5252", "#448aff"];
+const COLORS = ["#d4fbffff", "#ffab00", "#ff5252", "#448aff"];
 
 
 export default function Confetti() {
@@ -19,7 +19,7 @@ export default function Confetti() {
         alignItems: "center",
       }}
     >
-      {Array.from({ length: 200 }).map((_, i) => (
+      {Array.from({ length: 100 }).map((_, i) => (
         <ConfettiPiece
           key={i}
           color={COLORS[i % COLORS.length]}
